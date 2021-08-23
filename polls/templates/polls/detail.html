@@ -1,6 +1,13 @@
 <h1>{{ question.question_text }}</h1>
-<ul>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+{# 질문 선택 항목에 대한 라디오 버튼 표시 #}
+<form action="{% url 'polls:vote' question.id %}" method="post"> {# method="post"인 부분이 server-side로 진행된다. #}
+{% csrf_token %}
 {% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }}</li>
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
 {% endfor %}
-</ul>
+<input type="submit" value="Vote">
+</form>
